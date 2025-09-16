@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transparent Video Creator - Convert PNG to Transparent Video</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎬 Transparent Video Creator</h1>
+            <p>Convert PNG sequences to transparent videos easily</p>
+        </header>
+
+        <main>
+            <!-- Drop Zone -->
+            <div id="dropZone" class="drop-zone">
+                <div class="drop-zone-content">
+                    <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <h2>Drop PNG images here</h2>
+                    <p>or click to browse</p>
+                    <input type="file" id="fileInput" multiple accept=".png" style="display: none;">
+                </div>
+            </div>
+
+            <!-- File List -->
+            <div id="fileList" class="file-list hidden">
+                <h3>Selected Images</h3>
+                <div id="fileItems"></div>
+                <button id="clearFiles" class="btn btn-secondary">Clear All</button>
+            </div>
+
+            <!-- Settings -->
+            <div id="settings" class="settings hidden">
+                <h3>Video Settings</h3>
+                
+                <div class="setting-group">
+                    <label for="fps">Frame Rate (FPS)</label>
+                    <select id="fps" class="select">
+                        <option value="24" selected>24 fps (Cinema)</option>
+                        <option value="25">25 fps (PAL)</option>
+                        <option value="30">30 fps (NTSC)</option>
+                        <option value="60">60 fps (High)</option>
+                    </select>
+                </div>
+
+                <div class="setting-group">
+                    <label for="codec">Output Format</label>
+                    <select id="codec" class="select">
+                        <option value="gif" selected>GIF - Optimized Animation</option>
+                        <option value="vp9">WebM (VP9) - Best for Web</option>
+                        <option value="vp8">WebM (VP8) - Wide Compatibility</option>
+                        <option value="prores">MOV (ProRes 4444) - Professional</option>
+                        <option value="qtrle">MOV (Animation) - Quick Preview</option>
+                    </select>
+                </div>
+
+                <div class="setting-group">
+                    <label for="quality">Quality</label>
+                    <select id="quality" class="select">
+                        <option value="good" selected>Good (Balanced)</option>
+                        <option value="best">Best (Slower)</option>
+                        <option value="realtime">Fast (Lower Quality)</option>
+                    </select>
+                </div>
+
+                <button id="processBtn" class="btn btn-primary">
+                    <span class="btn-text">Create Video</span>
+                    <span class="spinner hidden"></span>
+                </button>
+            </div>
+
+            <!-- Progress -->
+            <div id="progress" class="progress-section hidden">
+                <h3>Processing...</h3>
+                <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill"></div>
+                </div>
+                <p id="progressText">Uploading images...</p>
+            </div>
+
+            <!-- Result -->
+            <div id="result" class="result-section hidden">
+                <h3>✅ Video Ready!</h3>
+                <p id="resultText"></p>
+                <button id="downloadBtn" class="btn btn-success">Download Video</button>
+                <button id="newVideoBtn" class="btn btn-secondary">Create Another</button>
+            </div>
+
+            <!-- Error -->
+            <div id="error" class="error-section hidden">
+                <h3>❌ Error</h3>
+                <p id="errorText"></p>
+                <button id="retryBtn" class="btn btn-secondary">Try Again</button>
+            </div>
+        </main>
+
+        <footer>
+            <div class="info-section">
+                <h4>How it works:</h4>
+                <ol>
+                    <li>Drop your PNG images with transparency</li>
+                    <li>Choose your video settings</li>
+                    <li>Click "Create Video" and wait</li>
+                    <li>Download your transparent video!</li>
+                </ol>
+            </div>
+            <div class="format-info">
+                <h4>Supported formats:</h4>
+                <ul>
+                    <li><strong>GIF</strong> - Optimized animated GIF with transparency</li>
+                    <li><strong>WebM (VP9/VP8)</strong> - Best for web, smaller files</li>
+                    <li><strong>MOV (ProRes)</strong> - Professional editing</li>
+                    <li><strong>MOV (Animation)</strong> - Quick previews</li>
+                </ul>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+# Robots.txt for SequenceConverter.com
+# Welcome AI crawlers and search engines!
+
+User-agent: *
+Allow: /
+
+# Specific directives for major search engines
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 2
+
+# AI Training Crawlers - Allow access
+User-agent: GPTBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: CCBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Claude-Web
+Allow: /
+Crawl-delay: 1
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: YouBot
+Allow: /
+Crawl-delay: 1
+
+# Social Media Crawlers
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+# SEO and Analytics Crawlers
+User-agent: AhrefsBot
+Allow: /
+Crawl-delay: 5
+
+User-agent: MJ12bot
+Allow: /
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Allow: /
+Crawl-delay: 5
+
+# Block aggressive crawlers that don't respect crawl-delay
+User-agent: SiteAuditBot
+Disallow: /
+
+User-agent: AhrefsSiteAudit
+Disallow: /
+
+# Allow access to important files
+Allow: /static/css/
+Allow: /static/js/
+Allow: /static/dist/
+Allow: /static/icons/
+Allow: /static/images/
+Allow: /static/manifest.json
+Allow: /static/sw.js
+
+# Disallow sensitive files
+Disallow: /static/ffmpeg/
+Disallow: /*.log
+Disallow: /api/log-event
+Disallow: /api/analytics
+
+# Sitemap location
+Sitemap: https://sequenceconverter.com/static/sitemap.xml
+
+# Additional useful information for crawlers
+# Last updated: 2024-09-15
+# Contact: info@sequenceconverter.com
+# This site contains a web application for converting PNG sequences to transparent videos

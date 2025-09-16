@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Transparent Video Creator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_premium.css') }}">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="{{ url_for('static', filename='ffmpeg/ffmpeg.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <!-- Video Background -->
+    <div class="video-background">
+        <video autoplay muted loop playsinline preload="auto" id="bg-video">
+            <source src="{{ url_for('static', filename='videos/background.mp4') }}" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+    
+    <script>
+        // Ensure video loads properly
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('bg-video');
+            
+            // Force video to load
+            video.load();
+            
+            // Check if video can play
+            video.addEventListener('error', function() {
+                console.log('Video error occurred, applying fallback background');
+                document.body.classList.add('video-fallback');
+            });
+            
+            // Log when video is playing
+            video.addEventListener('playing', function() {
+                console.log('Video is now playing');
+            });
+        });
+    </script>
+    <!-- Main Application -->
+    <div id="main-app" class="hidden">
+        <!-- Simplified Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🎬 Premium Video Creator</h1>
+                <div class="user-info">
+                    <span id="usage-display" class="usage-display">Full Access - No Login Required</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Container -->
+        <div class="container">
+            <!-- Transparency Toggle -->
+            <div class="transparency-toggle-container">
+                <h3>Choose Your Video Type</h3>
+                <div class="toggle-switch-container">
+                    <label class="toggle-option">Standard Video</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="transparency" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <label class="toggle-option active">Transparent Video</label>
+                </div>
+            </div>
+            
+            <!-- File Upload -->
+            <div id="drop-zone" class="drop-zone">
+                <div class="upload-icon">📁</div>
+                <h3>Drop PNG Files Here</h3>
+                <p>Or click to select files</p>
+                <input type="file" id="file-input" multiple accept=".png" style="display: none;">
+            </div>
+
+            <!-- File List -->
+            <div id="file-list" class="file-list hidden">
+                <h4>Selected Files (<span id="file-count">0</span>)</h4>
+                <div id="files-container"></div>
+            </div>
+
+            <!-- Settings -->
+            <div id="settings" class="settings hidden">
+                <h4>Video Settings</h4>
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <label>Frame Rate (FPS)</label>
+                        <div class="fps-buttons">
+                            <button type="button" class="fps-btn active" data-fps="24">24 FPS</button>
+                            <button type="button" class="fps-btn" data-fps="30">30 FPS</button>
+                            <button type="button" class="fps-btn" data-fps="60">60 FPS</button>
+                        </div>
+                        <input type="hidden" id="fps" value="24">
+                    </div>
+
+                    <!-- Transparency toggle moved to top of page -->
+                    
+                    <div class="setting-group">
+                        <label>Output Format</label>
+                        <div id="format-group-transparent" class="format-buttons">
+                            <button type="button" class="format-btn active" data-format="webm_transparent">VP9 WebM</button>
+                            <button type="button" class="format-btn" data-format="gif">Animated GIF</button>
+                        </div>
+                        <div id="format-group-standard" class="format-buttons hidden">
+                            <button type="button" class="format-btn active" data-format="mp4_h264">H.264 MP4</button>
+                            <button type="button" class="format-btn" data-format="webm_standard">VP9 WebM</button>
+                        </div>
+                        <input type="hidden" id="format" value="webm_transparent">
+                    </div>
+                    
+                    <div class="setting-group">
+                        <label>Quality</label>
+                        <div class="quality-buttons">
+                            <button type="button" class="quality-btn active" data-quality="medium">Medium</button>
+                            <button type="button" class="quality-btn" data-quality="high" id="high-quality">High</button>
+                        </div>
+                        <input type="hidden" id="quality" value="medium">
+                    </div>
+                </div>
+                
+                <button id="create-btn" class="create-btn" disabled>
+                    Create Transparent Video
+                </button>
+            </div>
+
+            <!-- Progress -->
+            <div id="progress-overlay" class="progress-overlay hidden">
+                <div id="progress-section" class="progress-section">
+                    <div class="loader-container">
+                        <div class="animated-loader">
+                            <div class="loader-circle"></div>
+                            <div class="loader-line-mask">
+                                <div class="loader-line"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Creating Your Video...</h3>
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <p id="progress-text">Initializing...</p>
+                </div>
+            </div>
+
+            <!-- Result -->
+            <div id="result-section" class="result-section hidden">
+                <h3>🎉 Video Created Successfully!</h3>
+                <div class="result-content">
+                    <video id="result-video" class="result-video" controls autoplay loop></video>
+                    <div class="result-actions">
+                        <button id="download-btn" class="download-btn">Download Video</button>
+                        <button id="create-another" class="secondary-btn">Create Another</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error -->
+            <div id="error-section" class="error-section hidden">
+                <h3>❌ Something Went Wrong</h3>
+                <p id="error-message"></p>
+                <button id="try-again" class="secondary-btn">Try Again</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upgrade Modal -->
+    <div id="upgrade-modal" class="modal hidden">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeUpgradeModal()">&times;</button>
+            <h2>Upgrade to Pro</h2>
+            <p>Unlock unlimited video creation and premium features</p>
+            
+            <div class="pricing-comparison">
+                <div class="tier-card current">
+                    <h3>Free</h3>
+                    <div class="price">$0/month</div>
+                    <ul>
+                        <li>✅ 5 videos per month</li>
+                        <li>✅ Up to 50 frames</li>
+                        <li>❌ Watermark on GIFs</li>
+                        <li>❌ Medium quality only</li>
+                    </ul>
+                    <button disabled>Current Plan</button>
+                </div>
+                
+                <div class="tier-card pro">
+                    <h3>Pro</h3>
+                    <div class="price">$9/month</div>
+                    <ul>
+                        <li>✅ Unlimited videos</li>
+                        <li>✅ Unlimited frames</li>
+                        <li>✅ No watermarks</li>
+                        <li>✅ High quality exports</li>
+                        <li>✅ Priority support</li>
+                    </ul>
+                    <button class="upgrade-pro-btn">Upgrade Now</button>
+                </div>
+            </div>
+            
+            <p style="margin-top: 1rem; color: #666; font-size: 14px;">
+                Payment processing coming soon! Contact us for early access.
+            </p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='app_premium.js') }}"></script>
+    <script>
+        // Initialize the app once the DOM is ready and the class is defined
+        document.addEventListener('DOMContentLoaded', () => {
+            window.app = new TransparentVideoCreator();
+        });
+    </script>
+</body>
+</html>
