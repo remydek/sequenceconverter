@@ -17,7 +17,7 @@
   },
   "headers": [
     {
-      "source": "/static/(.*)",
+      "source": "/(css|js|images|icons|ffmpeg|videos)/(.*)",
       "headers": [
         {
           "key": "Cache-Control",

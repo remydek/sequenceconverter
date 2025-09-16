@@ -1,0 +1,40 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="240" fill="url(#gradient)" />
+
+  <!-- Camera/Video icon -->
+  <g transform="translate(256, 256)" fill="white">
+    <!-- Camera body -->
+    <rect x="-80" y="-40" width="160" height="80" rx="12" />
+
+    <!-- Lens -->
+    <circle cx="-20" cy="0" r="30" fill="none" stroke="white" stroke-width="4" />
+    <circle cx="-20" cy="0" r="20" fill="white" opacity="0.3" />
+
+    <!-- Record button -->
+    <circle cx="40" cy="-20" r="8" fill="#ef4444" />
+
+    <!-- Film strip -->
+    <rect x="-100" y="-60" width="200" height="20" fill="white" opacity="0.8" />
+    <rect x="-90" y="-55" width="15" height="10" fill="url(#gradient)" />
+    <rect x="-65" y="-55" width="15" height="10" fill="url(#gradient)" />
+    <rect x="-40" y="-55" width="15" height="10" fill="url(#gradient)" />
+    <rect x="-15" y="-55" width="15" height="10" fill="url(#gradient)" />
+    <rect x="10" y="-55" width="15" height="10" fill="url(#gradient)" />
+    <rect x="35" y="-55" width="15" height="10" fill="url(#gradient)" />
+    <rect x="60" y="-55" width="15" height="10" fill="url(#gradient)" />
+
+    <!-- Play button overlay -->
+    <polygon points="-10,-15 -10,15 20,0" fill="white" opacity="0.9" />
+  </g>
+
+  <!-- Transparency indicator -->
+  <text x="256" y="420" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">TRANSPARENT</text>
+</svg>
