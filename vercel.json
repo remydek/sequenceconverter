@@ -1,43 +1,23 @@
 {
   "version": 2,
   "name": "transparent-video-app",
-  "builds": [
-    {
-      "src": "app_new.py",
-      "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "50mb"
-      }
-    },
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "static/dist"
-      }
+  "functions": {
+    "api/index.py": {
+      "maxDuration": 30
     }
-  ],
+  },
   "routes": [
     {
       "src": "/static/(.*)",
       "dest": "/static/$1"
     },
     {
-      "src": "/api/(.*)",
-      "dest": "/app_new.py"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/app_new.py"
+      "dest": "/api/index.py"
     }
   ],
   "env": {
     "FLASK_ENV": "production"
-  },
-  "functions": {
-    "app_new.py": {
-      "maxDuration": 30
-    }
   },
   "headers": [
     {
@@ -73,12 +53,6 @@
           "value": "1; mode=block"
         }
       ]
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/",
-      "destination": "/templates/index_new.html"
     }
   ]
 }
